@@ -148,6 +148,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
+        
+        SafeBrowsingClient.shared.fetch({
+            if let error = $0 {
+                log.error(error)
+            }
+        })
 
         log.info("startApplication end")
         return true
