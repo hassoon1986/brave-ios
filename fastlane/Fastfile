@@ -54,7 +54,7 @@ platform :ios do
   desc "Creates a Brave Beta Release build for TestFlight."
   lane :beta do |options|
     overrideParams = {
-      scheme: "FirefoxBeta",
+      scheme: "ExternalBeta",
       export_method: "development",
     }
     testflight_build({overrideParams: overrideParams})
