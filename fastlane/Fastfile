@@ -33,7 +33,7 @@ platform :ios do
   lane :test do |options|
     sh("../Client/WebFilters/ContentBlocker/Lists/test-compile-all-lists.sh")
     run_tests(
-      scheme: "Development",
+      scheme: "Debug",
       device: "iPhone 8",
       code_coverage: true,
       skip_testing: [
@@ -54,7 +54,7 @@ platform :ios do
   desc "Creates a Brave Beta Release build for TestFlight."
   lane :beta do |options|
     overrideParams = {
-      scheme: "ExternalBeta",
+      scheme: "Beta",
       export_method: "development",
     }
     testflight_build({overrideParams: overrideParams})
@@ -64,7 +64,7 @@ platform :ios do
   lane :internal do |options|
 
     overrideParams = {
-      scheme: "InternalBeta",
+      scheme: "Dev",
       export_method: "development",
     }
     testflight_build({overrideParams: overrideParams})
