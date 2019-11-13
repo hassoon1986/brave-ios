@@ -51,7 +51,7 @@
       </CommandLineArguments>
       <TestPlans>
          <TestPlanReference
-            reference = "container:Client.xcodeproj/Fennec.xctestplan"
+            reference = "container:Client.xcodeproj/Brave.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
