@@ -64,7 +64,7 @@ platform :ios do
   lane :internal do |options|
 
     overrideParams = {
-      scheme: "Fennec_Enterprise",
+      scheme: "InternalBeta",
       export_method: "development",
     }
     testflight_build({overrideParams: overrideParams})
