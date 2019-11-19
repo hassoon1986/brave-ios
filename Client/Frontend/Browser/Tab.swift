@@ -41,6 +41,12 @@ struct TabState {
     var favicon: Favicon?
 }
 
+enum TabSecureContentState {
+    case secure
+    case insecure
+    case unknown
+}
+
 class Tab: NSObject {
     var id: String?
     
@@ -54,7 +60,7 @@ class Tab: NSObject {
         return type.isPrivate
     }
     
-    var contentIsSecure = false
+    var secureContentState: TabSecureContentState = .insecure
     
     var tabState: TabState {
         return TabState(type: type, desktopSite: desktopSite, url: url, title: displayTitle, favicon: displayFavicon)
