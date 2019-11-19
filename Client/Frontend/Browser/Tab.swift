@@ -42,6 +42,7 @@ struct TabState {
 }
 
 enum TabSecureContentState {
+    case localHost
     case secure
     case insecure
     case unknown
