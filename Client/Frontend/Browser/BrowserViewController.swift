@@ -734,6 +734,7 @@ class BrowserViewController: UIViewController {
         
         // The user either skipped or didn't complete onboarding.
         let isRewardsEnabled = rewards.ledger.isEnabled
+        let currentProgress = OnboardingProgress(rawValue: Preferences.General.basicOnboardingProgress.value) ?? .none
         
         // 1. Existing user.
         // 2. The user skipped onboarding before.
@@ -748,7 +749,7 @@ class BrowserViewController: UIViewController {
             if daysUntilNextPrompt <= Date() {
                 guard let onboarding = OnboardingNavigationController(
                     profile: profile,
-                    onboardingType: rewards.ledger.isEnabled ? .existingUserRewardsOn : .existingUserRewardsOff,
+                    onboardingType: rewards.ledger.isEnabled ? .existingUserRewardsOn(currentProgress) : .existingUserRewardsOff(currentProgress),
                     rewards: rewards,
                     theme: Theme.of(tabManager.selectedTab)
                     ) else { return }
@@ -770,7 +771,7 @@ class BrowserViewController: UIViewController {
             
             guard let onboarding = OnboardingNavigationController(
                 profile: profile,
-                onboardingType: isRewardsEnabled ? .existingUserRewardsOn : .existingUserRewardsOff,
+                onboardingType: isRewardsEnabled ? .existingUserRewardsOn(currentProgress) : .existingUserRewardsOff(currentProgress),
                 rewards: rewards,
                 theme: Theme.of(tabManager.selectedTab)
                 ) else { return }
@@ -788,7 +789,7 @@ class BrowserViewController: UIViewController {
             
             guard let onboarding = OnboardingNavigationController(
                 profile: profile,
-                onboardingType: isRewardsEnabled ? .existingUserRewardsOn : .existingUserRewardsOff,
+                onboardingType: isRewardsEnabled ? .existingUserRewardsOn(currentProgress) : .existingUserRewardsOff(currentProgress),
                 rewards: rewards,
                 theme: Theme.of(tabManager.selectedTab)
                 ) else { return }
@@ -809,7 +810,7 @@ class BrowserViewController: UIViewController {
             
             guard let onboarding = OnboardingNavigationController(
                 profile: profile,
-                onboardingType: isRewardsEnabled ? .existingUserRewardsOn : .existingUserRewardsOff,
+                onboardingType: isRewardsEnabled ? .existingUserRewardsOn(currentProgress) : .existingUserRewardsOff(currentProgress),
                 rewards: rewards,
                 theme: Theme.of(tabManager.selectedTab)
                 ) else { return }
@@ -827,7 +828,7 @@ class BrowserViewController: UIViewController {
             
             guard let onboarding = OnboardingNavigationController(
                 profile: profile,
-                onboardingType: .newUser,
+                onboardingType: .newUser(currentProgress),
                 rewards: rewards,
                 theme: Theme.of(tabManager.selectedTab)
                 ) else { return }
