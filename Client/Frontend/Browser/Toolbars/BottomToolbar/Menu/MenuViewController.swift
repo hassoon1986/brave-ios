@@ -51,7 +51,7 @@ class MenuViewController: UITableViewController {
     }
     
     private enum MenuButtons: Int, CaseIterable {
-        case settings, history, bookmarks, downloads, add, share
+        case settings, history, bookmarks, downloads, add, share, playlist
         
         var title: String {
             switch self {
@@ -61,6 +61,7 @@ class MenuViewController: UITableViewController {
             case .add: return Strings.AddToMenuItem
             case .share: return Strings.ShareWithMenuItem
             case .downloads: return Strings.DownloadsMenuItem
+            case .playlist: return Strings.PlaylistMenuItem
             }
         }
         
@@ -72,6 +73,7 @@ class MenuViewController: UITableViewController {
             case .add: return #imageLiteral(resourceName: "menu-add-bookmark").template
             case .share: return #imageLiteral(resourceName: "nav-share").template
             case .downloads: return #imageLiteral(resourceName: "menu-downloads").template
+            case .playlist: return #imageLiteral(resourceName: "nav-forward").template
             }
         }
     }
@@ -80,11 +82,16 @@ class MenuViewController: UITableViewController {
     private let tab: Tab?
     
     private lazy var visibleButtons: [MenuButtons] = {
-        let allButtons = MenuButtons.allCases
+        var allButtons = MenuButtons.allCases
         
         // Don't show url buttons if there is no url to pick(like on home screen)
         var allWithoutUrlButtons = allButtons
         allWithoutUrlButtons.removeAll { $0 == .add || $0 == .share }
+        
+        if tab?.playlistItems.value.isEmpty == true {
+            allButtons.removeAll { $0 == .playlist }
+            allWithoutUrlButtons.removeAll { $0 == .playlist }
+        }
         
         guard let url = tab?.url, (!url.isLocal || url.isReaderModeURL) else {
             return allWithoutUrlButtons
@@ -155,6 +162,7 @@ class MenuViewController: UITableViewController {
         case .add: openAddBookmark()
         case .share: openShareSheet()
         case .downloads: openDownloads()
+        case .playlist: openPlaylists()
         }
     }
     
@@ -229,6 +237,11 @@ class MenuViewController: UITableViewController {
         let currentTheme = Theme.of(bvc.tabManager.selectedTab)
         vc.applyTheme(currentTheme)
         
+        open(vc, doneButton: DoneButton(style: .done, position: .right))
+    }
+    
+    private func openPlaylists() {
+        let vc = PlaylistViewController(tabManager: bvc.tabManager)
         open(vc, doneButton: DoneButton(style: .done, position: .right))
     }
     
