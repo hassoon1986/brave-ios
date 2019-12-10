@@ -178,7 +178,11 @@ public class DataController: NSObject {
             if !context.hasChanges { return }
             
             do {
-                try context.save()
+                if isProtectedDataAvailable() {
+                    try context.save()
+                } else {
+                    log.warning("Attempting to save view context when database is protected r/w is not available - DataProtection Enabled")
+                }
             } catch {
                 assertionFailure("Error saving DB: \(error)")
             }
@@ -264,5 +268,18 @@ public class DataController: NSObject {
         let backgroundContext = DataController.sharedInMemory.container.newBackgroundContext()
         backgroundContext.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
         return backgroundContext
+    }
+    
+    // Writing to CoreData or any DataProtected DB will cause a CRASH since iOS 5.1
+    // https://stackoverflow.com/a/14050896/1462718
+    // This function returns whether or not the DB is read/write.
+    private static func isProtectedDataAvailable() -> Bool {
+        if Thread.isMainThread {
+            return UIApplication.shared.isProtectedDataAvailable
+        }
+        
+        return DispatchQueue.main.sync {
+            return UIApplication.shared.isProtectedDataAvailable
+        }
     }
 }
